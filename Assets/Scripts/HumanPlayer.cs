@@ -20,12 +20,13 @@ namespace UNO
         public int CardLeft { get => _cardLeft; set => _cardLeft = value; }
         public int MyId { get => _myId; private set => _myId = value; }
         public string PlayerName { get => _playerName; private set => _playerName = value; }
-        public List<CardObj> MyCards { get => _myCards; private  set => _myCards= value; }
-        public Stack<Card> StackOfCard { get => _stackOfCard; private  set => _stackOfCard= value; }
-        public bool CanChoose { get => _canChoose; set => _canChoose= value; }
+        public List<CardObj> MyCards { get => _myCards; private set => _myCards = value; }
+        public Stack<Card> StackOfCard { get => _stackOfCard; private set => _stackOfCard = value; }
+        public bool CanChoose { get => _canChoose; set => _canChoose = value; }
+
         public void Caught()
         {
-            
+
         }
 
         public void ChooseCard()
@@ -39,7 +40,7 @@ namespace UNO
                     MyCards[i].gameObject.GetComponent<MeshRenderer>().material.color = Color.yellow;
                     PlayerHelper.ResetValid(this);
                     CanChoose = false;
-                    PlayerHelper.ShowValidCard(StackOfCard.Peek(),this);
+                    PlayerHelper.ShowValidCard(StackOfCard.Peek(), this);
                     break;
                 }
             }
@@ -65,7 +66,7 @@ namespace UNO
             PlayerHelper.ResetValid(this);
             if (MyCards.Count > 15)
                 return;
-            PlayerHelper.AddCard(MatchManager.Instance.GetNewCard(),this);
+            PlayerHelper.AddCard(MatchManager.Instance.GetNewCard(), this);
             CardLeft++;
             CanChoose = false;
             CanShowCard = false;
@@ -82,7 +83,7 @@ namespace UNO
         {
             PlayerHelper.ResetValid(this);
             Card topCard = MatchManager.Instance.GetTopCard();
-            PlayerHelper.ShowValidCard(topCard,this);
+            PlayerHelper.ShowValidCard(topCard, this);
             CanShowCard = false;
         }
 
@@ -96,7 +97,7 @@ namespace UNO
             IsturnCompleted = true;
         }
 
-        
+
         void Update()
         {
             if (IsMyTurn)
@@ -105,11 +106,31 @@ namespace UNO
                     ShowCard();
                 if (CanChoose)
                     ChooseCard();
+                if (Input.GetKeyDown(KeyCode.D))
+                    DeSelectCard();
                 if (Input.GetKeyDown(KeyCode.T) && StackOfCard.Count > 0)
                     ThrowCard();
                 if (Input.GetKeyDown(KeyCode.P))
                     PickCard();
             }
+        }
+
+        private void DeSelectCard()
+        {
+
+            if (StackOfCard.Count == 0)
+                return;
+
+            while (StackOfCard.Count != 0)
+            {
+                StackOfCard.Pop().IsSelected = false;
+            }
+
+            PlayerHelper.ResetValid(this);
+            Card topCard = MatchManager.Instance.GetTopCard();
+            PlayerHelper.ShowValidCard(topCard, this);
+            CanShowCard = false;
+
         }
     }
 }

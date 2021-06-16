@@ -15,6 +15,7 @@ namespace UNO
         List<CardObj> MyCards { get; }
         Stack<Card> StackOfCard { get; }
         bool CanChoose { get; set; }
+
         void Intialize(int cardLeft, int id, string name);
     }
 }

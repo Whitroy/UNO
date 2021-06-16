@@ -152,13 +152,13 @@ public class MatchManager : MonoBehaviour
         for (int i = 0; i < totalNumberOfPlayers; i++)
         {
             GameObject player = new GameObject();
-            IPlayer currentPlayer = player.AddComponent<HumanPlayer>();
+            IPlayer currentPlayer =i==0 ? player.AddComponent<HumanPlayer>() : player.AddComponent<AIPlayer>();
             Vector3 pos = i % 2 == 0 ? new Vector3(transform.position.x,
                 transform.position.y + i < 2 ? -yDist : yDist) : new Vector3(transform.position.x + i < 2 ? -xDist : xDist,
                 transform.position.y);
             player.transform.position = pos;
             player.transform.SetParent(this.transform);
-            player.name = "Player" + (i + 1);
+            player.name = "Player" + (i);
             currentPlayer.Intialize(startingNumberOfCards, i + 1, "Player" + i + 1);
             Quaternion rot = Quaternion.Euler(Vector3.forward * (i%2 ==0? 0f:-180f));
             player.transform.rotation = rot;
@@ -228,6 +228,7 @@ public class MatchManager : MonoBehaviour
 
         if (players[currentPlayer].IsturnCompleted)
         {
+            Debug.Log($"<color=yellow> {players[currentPlayer].PlayerName} </color>");
             players[currentPlayer].IsMyTurn = false;
             players[currentPlayer].IsturnCompleted = false;
             players[currentPlayer].CanShowCard = false;
